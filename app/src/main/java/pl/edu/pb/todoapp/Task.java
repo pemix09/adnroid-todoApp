@@ -28,4 +28,6 @@ public class Task {
     public void setIsDone(boolean done){
         this.done = done;
     }
+    public UUID getID(){return this.id;}
+    public String GetName(){return this.name;}
 }

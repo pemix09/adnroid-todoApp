@@ -6,15 +6,18 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.UUID;
 
+public class MainActivity extends SingleFragmentActivity {
+
+    public String KEY_EXTRA_TASK_ID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        Fragment fragment = createFragment();
 
         if(fragment == null){
             fragment = new TaskFragment();
@@ -22,5 +25,11 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.fragment_container,fragment)
                     .commit();
         }
+    }
+
+    @Override
+    protected Fragment createFragment() {
+        UUID taskId = (UUID) getIntent().getSerializableExtra(TaskListFragment.KEY_EXTRA_TASK_ID);
+        return TaskFragment.newInstance(taskId);
     }
 }

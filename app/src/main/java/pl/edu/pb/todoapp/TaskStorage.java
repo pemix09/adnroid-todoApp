@@ -2,6 +2,7 @@ package pl.edu.pb.todoapp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TaskStorage {
     private static final TaskStorage taskStorage = new TaskStorage();
@@ -10,6 +11,17 @@ public class TaskStorage {
     public static TaskStorage GetInstance(){
         return taskStorage;
     }
+
+    public Task GetById(UUID id){
+        for (Task task : this.tasks) {
+            if(task.getID().equals(id)){
+                return task;
+            }
+        }
+        return null;
+    }
+
+    public List<Task> getTasks(){return this.tasks;}
 
     private TaskStorage(){
         tasks = new ArrayList<>();
