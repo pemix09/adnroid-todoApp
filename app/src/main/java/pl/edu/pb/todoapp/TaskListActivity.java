@@ -19,7 +19,7 @@ public class TaskListActivity extends SingleFragmentActivity {
         if(fragment == null){
             fragment = new TaskListFragment();
             fragmentManager.beginTransaction()
-                    .add(R.id.fragment_container,fragment)
+                    .add(R.id.task_recycler_view,fragment)
                     .commit();
         }
     }
@@ -27,6 +27,6 @@ public class TaskListActivity extends SingleFragmentActivity {
     @Override
     protected Fragment createFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        return fragmentManager.findFragmentById(R.id.fragment_task_list);
+        return fragmentManager.findFragmentById(R.id.task_recycler_view);
     }
 }
