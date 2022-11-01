@@ -1,16 +1,11 @@
 package pl.edu.pb.todoapp;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
 import android.os.Bundle;
-
-import java.util.UUID;
 
 public class MainActivity extends SingleFragmentActivity {
 
-    public String KEY_EXTRA_TASK_ID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
