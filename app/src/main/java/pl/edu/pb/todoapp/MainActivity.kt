@@ -9,6 +9,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val fragmentManager = supportFragmentManager
+        val fragment: Fragment? = fragmentManager.findFragmentById(R.id.fragment_container)
+
+        if(fragment == null) {
+            fragment = TaskFragment()
+        }
     }
 
 }
