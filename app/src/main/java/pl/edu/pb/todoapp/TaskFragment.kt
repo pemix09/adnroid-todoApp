@@ -9,6 +9,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import java.util.UUID
 
 class TaskFragment : Fragment() {
 
@@ -31,16 +32,22 @@ class TaskFragment : Fragment() {
 
         isDoneCheckBox = requireView().findViewById(R.id.task_done)
         isDoneCheckBox.isChecked = task.isDone
-        isDoneCheckBox.setOnCheckedChangeListener{
-            task.isDone = isDoneCheckBox.isChecked
+        isDoneCheckBox.setOnCheckedChangeListener{ buttonView, isChecked ->
+            task.isDone = isChecked
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_task, container, false)
+    }
+
+    companion object{
+        fun newInstance(taskId: UUID) : TaskFragment{
+            var newInstance = TaskFragment()
+            newInstance.task = TaskStorage.GetInstance().GetById(taskId)!!
+            return newInstance
+        }
     }
 }
