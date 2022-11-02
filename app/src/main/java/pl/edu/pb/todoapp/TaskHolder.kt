@@ -4,12 +4,13 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class TaskHolder(infalter: LayoutInflater, parent: ViewGroup?) :
-    RecyclerView.ViewHolder(infalter.inflate(R.layout.list_item_task, parent, false)),
-    View.OnClickListener {
+class TaskHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
     private var task: Task? = null
+    private var nameTextView: TextView
+    private var dateTextView: TextView
 
     init {
         itemView.setOnClickListener(this)
@@ -24,8 +25,8 @@ class TaskHolder(infalter: LayoutInflater, parent: ViewGroup?) :
     }
 
     override fun onClick(view: View) {
-        val intent = Intent(activity, MainActivity::class.java)
-        intent.putExtra(TaskListFragment.KEY_EXTRA_TASK_ID, task!!.iD)
-        startActivity(intent)
+//        val intent = Intent(activity, MainActivity::class.java)
+//        intent.putExtra(TaskListFragment.KEY_EXTRA_TASK_ID, task!!.iD)
+//        startActivity(intent)
     }
 }

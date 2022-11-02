@@ -1,13 +1,10 @@
 package pl.edu.pb.todoapp
 
-import pl.edu.pb.todoapp.SingleFragmentActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import pl.edu.pb.todoapp.R
-import pl.edu.pb.todoapp.TaskListFragment
 
-class TaskListActivity : SingleFragmentActivity() {
+class TaskListActivity : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
     val tasks: List<Task> = TaskStorage.GetInstance().tasks
@@ -17,10 +14,8 @@ class TaskListActivity : SingleFragmentActivity() {
         setContentView(R.layout.fragment_task_list)
 
         recyclerView = findViewById(R.id.task_recycler_view)
+        var adapter: TaskAdapter = TaskAdapter(this, tasks)
+        recyclerView.adapter = adapter
     }
 
-    override fun createFragment(): Fragment? {
-        val fragmentManager = supportFragmentManager
-        return fragmentManager.findFragmentById(R.id.task_recycler_view)
-    }
 }
