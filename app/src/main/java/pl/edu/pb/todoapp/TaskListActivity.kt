@@ -1,32 +1,26 @@
-package pl.edu.pb.todoapp;
+package pl.edu.pb.todoapp
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import pl.edu.pb.todoapp.SingleFragmentActivity
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
+import pl.edu.pb.todoapp.R
+import pl.edu.pb.todoapp.TaskListFragment
 
-import android.os.Bundle;
+class TaskListActivity : SingleFragmentActivity() {
 
-public class TaskListActivity extends SingleFragmentActivity {
+    lateinit var recyclerView: RecyclerView
+    val tasks: List<Task> = TaskStorage.GetInstance().tasks
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_task_list);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.fragment_task_list)
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = createFragment();
-
-        if(fragment == null){
-            fragment = new TaskListFragment();
-            fragmentManager.beginTransaction()
-                    .add(R.id.task_recycler_view,fragment)
-                    .commit();
-        }
+        recyclerView = findViewById(R.id.task_recycler_view)
     }
 
-    @Override
-    protected Fragment createFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        return fragmentManager.findFragmentById(R.id.task_recycler_view);
+    override fun createFragment(): Fragment? {
+        val fragmentManager = supportFragmentManager
+        return fragmentManager.findFragmentById(R.id.task_recycler_view)
     }
 }

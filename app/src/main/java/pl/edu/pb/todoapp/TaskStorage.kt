@@ -1,35 +1,34 @@
-package pl.edu.pb.todoapp;
+package pl.edu.pb.todoapp
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import pl.edu.pb.todoapp.TaskStorage
+import java.util.*
 
-public class TaskStorage {
-    private static final TaskStorage taskStorage = new TaskStorage();
-    private final List<Task> tasks;
-
-    public static TaskStorage GetInstance(){
-        return taskStorage;
-    }
-
-    public Task GetById(UUID id){
-        for (Task task : this.tasks) {
-            if(task.getID().equals(id)){
-                return task;
+class TaskStorage private constructor() {
+    val tasks: MutableList<Task>
+    fun GetById(id: UUID): Task? {
+        for (task in tasks) {
+            if (task.iD == id) {
+                return task
             }
         }
-        return null;
+        return null
     }
 
-    public List<Task> getTasks(){return this.tasks;}
 
-    private TaskStorage(){
-        tasks = new ArrayList<>();
-        for(int i = 1; i <= 150; i++){
-            Task task = new Task();
-            task.SetName("Pilne zadanie nr. "+i);
-            task.setIsDone( i%3 == 0);
-            tasks.add(task);
+    init {
+        tasks = ArrayList()
+        for (i in 1..150) {
+            val task = Task()
+            task.name = "Pilne zadanie nr. $i"
+            task.isDone = (i % 3 == 0)
+            tasks.add(task)
+        }
+    }
+
+    companion object {
+        private val taskStorage = TaskStorage()
+        fun GetInstance(): TaskStorage {
+            return taskStorage
         }
     }
 }

@@ -1,79 +1,69 @@
-package pl.edu.pb.todoapp;
+package pl.edu.pb.todoapp
 
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import android.widget.EditText
+import android.widget.CheckBox
+import android.os.Bundle
+import android.text.TextWatcher
+import android.text.Editable
+import android.widget.CompoundButton
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import androidx.fragment.app.Fragment
+import pl.edu.pb.todoapp.TaskFragment
+import java.util.*
 
-import java.util.UUID;
+class TaskFragment : Fragment() {
+    private var task: Task? = null
+    private var nameField: EditText? = null
+    private var dateButton: Button? = null
+    private var doneCheckBox: CheckBox? = null
 
-public class TaskFragment extends Fragment {
+    override fun onCreate(savedInstanceState: Bundle?) {
 
-    private Task task;
-    private EditText nameField;
-    private Button dateButton;
-    private CheckBox doneCheckBox;
+        super.onCreate(savedInstanceState)
+        val taskId = requireArguments().getSerializable(TaskListFragment.KEY_EXTRA_TASK_ID) as UUID
+        task = TaskStorage.GetInstance().GetById(taskId)
+        nameField = requireView().findViewById(R.id.task_name)
+        nameField?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                task?.name = s.toString()
+            }
 
-    public static TaskFragment newInstance(UUID taskId){
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(TaskListFragment.KEY_EXTRA_TASK_ID, taskId);
-        TaskFragment taskFragment = new TaskFragment();
-        taskFragment.setArguments(bundle);
-        return taskFragment;
+            override fun afterTextChanged(s: Editable) {}
+        })
+
+        dateButton = requireView().findViewById(R.id.task_date)
+        dateButton?.text = task?.date.toString()
+        dateButton?.isEnabled = false
+        doneCheckBox = requireView().findViewById(R.id.task_done)
+        doneCheckBox?.isChecked = task!!.isDone
+        doneCheckBox?.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView: CompoundButton?, isChecked: Boolean ->
+            task?.isDone = isChecked
+        })
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        UUID taskId = (UUID)getArguments().getSerializable(TaskListFragment.KEY_EXTRA_TASK_ID);
-        task = TaskStorage.GetInstance().GetById(taskId);
-
-        nameField = getView().findViewById(R.id.task_name);
-        nameField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                task.SetName(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        dateButton = getView().findViewById(R.id.task_date);
-        dateButton.setText(task.GetDate().toString());
-        dateButton.setEnabled(false);
-
-        doneCheckBox = getView().findViewById(R.id.task_done);
-        doneCheckBox.setChecked(task.isDone());
-        doneCheckBox.setOnCheckedChangeListener(((buttonView, isChecked) -> task.setIsDone(isChecked)));
-
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        nameField!!.setText(task!!.name)
+        dateButton!!.text = task!!.date.toString()
+        doneCheckBox!!.isChecked = task!!.isDone
+        return inflater.inflate(R.layout.fragment_task, container, false)
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        nameField.setText(task.GetName());
-        dateButton.setText(task.GetDate().toString());
-        doneCheckBox.setChecked(task.isDone());
-
-        return inflater.inflate(R.layout.fragment_task, container, false);
+    companion object {
+        fun newInstance(taskId: UUID?): TaskFragment {
+            val bundle = Bundle()
+            bundle.putSerializable(TaskListFragment.KEY_EXTRA_TASK_ID, taskId)
+            val taskFragment = TaskFragment()
+            taskFragment.arguments = bundle
+            return taskFragment
+        }
     }
 }
