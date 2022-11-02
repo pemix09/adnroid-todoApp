@@ -2,6 +2,7 @@ package pl.edu.pb.todoapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class TaskListActivity : AppCompatActivity() {
@@ -16,6 +17,7 @@ class TaskListActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.task_recycler_view)
         var adapter: TaskAdapter = TaskAdapter(this, tasks)
         recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
 }
