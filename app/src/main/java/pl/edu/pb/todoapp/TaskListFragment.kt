@@ -1,5 +1,6 @@
 package pl.edu.pb.todoapp
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,9 +53,16 @@ class TaskListFragment : Fragment() {
 
         override fun onClick(view: View) {
 
-            var intent: Intent = Intent(activity, MainActivity.javaClass)
-            intent.putExtra(MainActivity.taks_id_name, task?.iD)
-            startActivity(intent)
+            try{
+                var intent: Intent = Intent(view.context, EditTask().javaClass)
+                intent.putExtra(MainActivity.taks_id_name, task?.iD)
+                startActivity(intent)
+            }
+            catch(e: ActivityNotFoundException){
+                Toast.makeText(context,e.toString(),Toast.LENGTH_LONG).show();
+                System.out.print(e.toString())
+            }
+
 
         }
     }
