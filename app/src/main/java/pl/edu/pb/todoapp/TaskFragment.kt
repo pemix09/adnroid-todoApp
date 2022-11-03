@@ -1,6 +1,7 @@
 package pl.edu.pb.todoapp
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,8 +25,10 @@ class TaskFragment(taskId: UUID) : Fragment() {
     ): View? {
         var view: View = inflater.inflate(R.layout.fragment_task, container, false)
         nameField = view.findViewById(R.id.task_name)
+        nameField.setText(task.name)
         nameField.doAfterTextChanged {
-            task.name = nameField.toString()
+            task.name = nameField.text.toString()
+            TaskStorage.ChangeItem(task)
         }
 
         dateButton = view.findViewById<Button>(R.id.task_date)
@@ -36,6 +39,7 @@ class TaskFragment(taskId: UUID) : Fragment() {
         isDoneCheckBox.isChecked = task.isDone
         isDoneCheckBox.setOnCheckedChangeListener{ buttonView, isChecked ->
             task.isDone = isChecked
+            TaskStorage.ChangeItem(task)
         }
         return view
     }

@@ -30,5 +30,13 @@ class TaskStorage private constructor() {
         fun GetInstance(): TaskStorage {
             return taskStorage
         }
+        fun ChangeItem(editedTask: Task){
+            for(task in taskStorage.tasks){
+                if(editedTask.iD == task.iD){
+                    task.name = editedTask.name
+                    task.isDone = editedTask.isDone
+                }
+            }
+        }
     }
 }

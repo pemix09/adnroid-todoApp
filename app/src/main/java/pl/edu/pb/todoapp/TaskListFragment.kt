@@ -16,7 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TaskListFragment : Fragment() {
 
-    var adapter: TaskAdapter = TaskAdapter(TaskStorage.GetInstance().tasks)
+    var data: List<Task> = TaskStorage.GetInstance().tasks
+    var adapter: TaskAdapter = TaskAdapter(data)
     lateinit var recyclerView: RecyclerView;
 
     override fun onCreateView(
@@ -29,6 +30,12 @@ class TaskListFragment : Fragment() {
         recyclerView.adapter = this.adapter
         recyclerView.layoutManager = LinearLayoutManager(activity)
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        data = TaskStorage.GetInstance().tasks
+        adapter.notifyDataSetChanged()
     }
 
 
