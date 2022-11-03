@@ -10,13 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 class TaskListActivity : SingleFragmentActivity() {
 
 
-    lateinit var recyclerView: RecyclerView
-    val tasks: List<Task> = TaskStorage.GetInstance().tasks
-
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-    }
-
     override fun createFragment(): Fragment {
         return TaskListFragment()
     }

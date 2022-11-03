@@ -20,7 +20,9 @@ class TaskFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        task = Task()
+
+        var taskId: UUID = arguments?.getSerializable(MainActivity.taks_id_name) as UUID
+        task = TaskStorage.GetInstance().GetById(taskId)
         nameField = requireView().findViewById(R.id.task_name)
         nameField.doAfterTextChanged {
             task.name = nameField.toString()
@@ -46,7 +48,7 @@ class TaskFragment : Fragment() {
     companion object{
         fun newInstance(taskId: UUID) : TaskFragment{
             var newInstance = TaskFragment()
-            newInstance.task = TaskStorage.GetInstance().GetById(taskId)!!
+            newInstance.task = TaskStorage.GetInstance().GetById(taskId)
             return newInstance
         }
     }

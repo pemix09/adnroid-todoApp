@@ -10,10 +10,10 @@ abstract class SingleFragmentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_task_list)
+        setContentView(R.layout.activity_main)
 
         val fragmentManager = supportFragmentManager
-        var fragment: Fragment? = createFragment()
+        var fragment: Fragment? = fragmentManager.findFragmentById(R.id.fragment_container)
 
         if(fragment == null) {
             fragment = createFragment()

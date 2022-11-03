@@ -5,13 +5,13 @@ import java.util.*
 
 class TaskStorage private constructor() {
     val tasks: MutableList<Task>
-    fun GetById(id: UUID): Task? {
+    fun GetById(id: UUID): Task {
         for (task in tasks) {
             if (task.iD == id) {
                 return task
             }
         }
-        return null
+        return Task()
     }
 
 

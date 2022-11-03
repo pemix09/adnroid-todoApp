@@ -14,18 +14,25 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TaskListFragment : Fragment() {
 
+    var adapter: TaskAdapter = TaskAdapter(TaskStorage.GetInstance().tasks)
+    lateinit var recyclerView: RecyclerView;
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.task_recycler_view)
-        recyclerView?.layoutManager = LinearLayoutManager(activity)
-        return recyclerView
+        var view = inflater.inflate(R.layout.fragment_task_list, container, false)
+        recyclerView = view.findViewById(R.id.task_recycler_view)
+        recyclerView.adapter = this.adapter
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        return view
     }
 
-    inner class TaskHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+
+    inner class TaskHolder(inflater: LayoutInflater, parent: ViewGroup) :
+        RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_task, parent, false)),
+        View.OnClickListener {
         private var task: Task? = null
         private var nameTextView: TextView
         private var dateTextView: TextView
@@ -50,12 +57,11 @@ class TaskListFragment : Fragment() {
 
         }
     }
-    inner class TaskAdapter(private val context: Context, private val tasks: List<Task>) : RecyclerView.Adapter<TaskHolder>() {
+    inner class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskHolder {
-            val layoutInflater = LayoutInflater.from(context)
-            val view: View = layoutInflater.inflate(R.layout.list_item_task, parent, false)
-            return TaskHolder(view)
+            val layoutInflater = LayoutInflater.from(activity)
+            return TaskHolder(layoutInflater, parent)
         }
 
         override fun onBindViewHolder(holder: TaskHolder, position: Int) {
