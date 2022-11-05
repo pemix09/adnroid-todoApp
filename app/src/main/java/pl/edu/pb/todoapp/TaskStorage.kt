@@ -21,6 +21,7 @@ class TaskStorage private constructor() {
             val task = Task()
             task.name = "Pilne zadanie nr. $i"
             task.isDone = (i % 3 == 0)
+            task.category = if(i%3 == 0) Category.Studies else Category.Home
             tasks.add(task)
         }
     }

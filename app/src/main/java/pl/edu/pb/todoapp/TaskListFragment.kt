@@ -1,18 +1,19 @@
 package pl.edu.pb.todoapp
 
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
 
 class TaskListFragment : Fragment() {
 
@@ -43,19 +44,23 @@ class TaskListFragment : Fragment() {
         RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_task, parent, false)),
         View.OnClickListener {
         private var task: Task? = null
-        private var nameTextView: TextView
-        private var dateTextView: TextView
+        private var nameTextView: TextView = itemView.findViewById(R.id.task_item_name)
+        private var dateTextView: TextView = itemView.findViewById(R.id.task_item_date)
+        private val iconItemView: ImageView = itemView.findViewById(R.id.category_image_view)
+        public val checkBox: CheckBox = itemView.findViewById(R.id.task_checkbox_done)
+        var datePattern = "E, dd MMM yyyy HH:mm"
+        var dateFormat: SimpleDateFormat = SimpleDateFormat(datePattern)
 
         init {
             itemView.setOnClickListener(this)
-            nameTextView = itemView.findViewById(R.id.task_item_name)
-            dateTextView = itemView.findViewById(R.id.task_item_date)
         }
 
         fun Bind(task: Task) {
             this.task = task
             nameTextView.text = task.name
-            dateTextView.text = task.date.toString()
+            dateTextView.text = dateFormat.format(task.date)
+            checkBox.isChecked = task.isDone
+            iconItemView.setImageResource(if(task.category == Category.Home) R.drawable.home else R.drawable.study)
         }
 
         override fun onClick(view: View) {
@@ -83,6 +88,10 @@ class TaskListFragment : Fragment() {
         override fun onBindViewHolder(holder: TaskHolder, position: Int) {
             val task = tasks[position]
             holder.Bind(task)
+            var checkbox = holder.checkBox
+            checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
+                tasks[holder.bindingAdapterPosition].isDone = isChecked
+            }
         }
 
         override fun getItemCount(): Int {
