@@ -7,10 +7,14 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.DatePicker
 import android.widget.EditText
+import android.widget.Spinner
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
@@ -23,6 +27,7 @@ class TaskFragment(taskId: UUID) : Fragment(), OnDateSetListener {
     private lateinit var nameField: EditText
     private lateinit var isDoneCheckBox: CheckBox
     private lateinit var dateField: EditText
+    private lateinit var categorySpinner: Spinner
     private val datePattern = "E, dd MMM yyyy HH:mm"
     private val dateFormat: SimpleDateFormat = SimpleDateFormat(datePattern)
 
@@ -61,10 +66,26 @@ class TaskFragment(taskId: UUID) : Fragment(), OnDateSetListener {
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
+        categorySpinner = view.findViewById(R.id.task_category)
+        categorySpinner.adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, Category.values())
+        var itemSelectedListener = object : OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                task.category = Category.values()[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        }
+        categorySpinner.onItemSelectedListener = itemSelectedListener
+        categorySpinner.setSelection(task.category.ordinal)
+
         return view
+
     }
 
-    fun setupDateFieldValue(date: Date){
+    private fun setupDateFieldValue(date: Date){
         var locale = Locale("pl", "PL")
         var dateFormat = SimpleDateFormat("dd.MM.yyyy", locale)
         dateField.setText(dateFormat.format(date))

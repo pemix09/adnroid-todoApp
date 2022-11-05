@@ -4,13 +4,12 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +20,7 @@ class TaskListFragment : Fragment() {
     var data: List<Task> = TaskStorage.GetInstance().tasks
     var adapter: TaskAdapter = TaskAdapter(data)
     lateinit var recyclerView: RecyclerView;
+    var subtitleIsVisible: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,12 +34,55 @@ class TaskListFragment : Fragment() {
         return view
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.new_task -> {
+                var task = Task()
+                TaskStorage.AddTask(task)
+                var intent = Intent(activity, EditTask().javaClass)
+                intent.putExtra(MainActivity.taks_id_name, task?.iD)
+                startActivity(intent)
+                true
+            }
+            R.id.show_subtitle -> {
+                    var subtitle = getString(R.string.subtitle_format, TaskStorage.TaskToDoLeft())
+                    activity?.actionBar?.subtitle = subtitle
+                    this.subtitleIsVisible = true
+                    activity?.invalidateOptionsMenu()
+                true
+            }
+            R.id.hide_subtitle -> {
+                activity?.actionBar?.subtitle = null
+                this.subtitleIsVisible = false
+                activity?.invalidateOptionsMenu()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         data = TaskStorage.GetInstance().tasks
         adapter.notifyDataSetChanged()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_task_menu, menu)
+        if(this.subtitleIsVisible){
+            inflater.inflate(R.menu.hide_subtitle, menu)
+        }else{
+            inflater.inflate(R.menu.show_subtitle, menu)
+        }
+    }
 
     inner class TaskHolder(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_task, parent, false)),
@@ -74,6 +117,7 @@ class TaskListFragment : Fragment() {
                 var intent: Intent = Intent(view.context, EditTask().javaClass)
                 intent.putExtra(MainActivity.taks_id_name, task?.iD)
                 startActivity(intent)
+                activity?.invalidateOptionsMenu()
             }
             catch(e: ActivityNotFoundException){
                 Toast.makeText(context,e.toString(),Toast.LENGTH_LONG).show();
