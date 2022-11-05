@@ -1,5 +1,7 @@
 package pl.edu.pb.todoapp
 
+import android.app.DatePickerDialog
+import android.app.DatePickerDialog.OnDateSetListener
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -7,17 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.DatePicker
 import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import java.util.UUID
+import java.text.SimpleDateFormat
+import java.util.*
 
-class TaskFragment(taskId: UUID) : Fragment() {
+class TaskFragment(taskId: UUID) : Fragment(), OnDateSetListener {
 
     private val task: Task = TaskStorage.GetInstance().GetById(taskId)
+    private val calendar: Calendar = Calendar.getInstance()
     private lateinit var nameField: EditText
-    private lateinit var dateButton: Button
     private lateinit var isDoneCheckBox: CheckBox
+    private lateinit var dateField: EditText
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -31,9 +36,6 @@ class TaskFragment(taskId: UUID) : Fragment() {
             TaskStorage.ChangeItem(task)
         }
 
-        dateButton = view.findViewById<Button>(R.id.task_date)
-        dateButton.text = task.date.toString()
-        dateButton.isEnabled = false
 
         isDoneCheckBox = view.findViewById(R.id.task_done)
         isDoneCheckBox.isChecked = task.isDone
@@ -41,7 +43,29 @@ class TaskFragment(taskId: UUID) : Fragment() {
             task.isDone = isChecked
             TaskStorage.ChangeItem(task)
         }
+
+        dateField = view.findViewById(R.id.task_date)
+        dateField.setText(task.date.toString())
+        OnDateSetListener { view, year, month, dayOfMonth ->
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            setupDateFieldValue(calendar.time)
+            task.date = calendar.time
+        }
+
+        dateField.setOnClickListener{view ->
+            DatePickerDialog(requireContext(), this, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
         return view
+    }
+
+    fun setupDateFieldValue(date: Date){
+        var locale = Locale("pl", "PL")
+        var dateFormat = SimpleDateFormat("dd.MM.yyyy", locale)
+        dateField.setText(dateFormat.format(date))
     }
 
     companion object{
@@ -49,5 +73,11 @@ class TaskFragment(taskId: UUID) : Fragment() {
             var newInstance = TaskFragment(taskId)
             return newInstance
         }
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        this.task.date = Date(year, month, dayOfMonth)
+        dateField.setText(task.date.toString())
+        TaskStorage.ChangeItem(task)
     }
 }
