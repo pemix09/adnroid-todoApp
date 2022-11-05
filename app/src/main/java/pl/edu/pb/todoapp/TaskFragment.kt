@@ -23,6 +23,8 @@ class TaskFragment(taskId: UUID) : Fragment(), OnDateSetListener {
     private lateinit var nameField: EditText
     private lateinit var isDoneCheckBox: CheckBox
     private lateinit var dateField: EditText
+    private val datePattern = "E, dd MMM yyyy HH:mm"
+    private val dateFormat: SimpleDateFormat = SimpleDateFormat(datePattern)
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +47,7 @@ class TaskFragment(taskId: UUID) : Fragment(), OnDateSetListener {
         }
 
         dateField = view.findViewById(R.id.task_date)
-        dateField.setText(task.date.toString())
+        dateField.setText(dateFormat.format(task.date))
         OnDateSetListener { view, year, month, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
@@ -77,7 +79,7 @@ class TaskFragment(taskId: UUID) : Fragment(), OnDateSetListener {
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         this.task.date = Date(year, month, dayOfMonth)
-        dateField.setText(task.date.toString())
+        dateField.setText(dateFormat.format(task.date))
         TaskStorage.ChangeItem(task)
     }
 }
