@@ -61,6 +61,10 @@ class TaskListFragment : Fragment() {
             nameTextView.text = task.name
             dateTextView.text = dateFormat.format(task.date)
             checkBox.isChecked = task.isDone
+            if(task.isDone){
+                nameTextView.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                dateTextView.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+            }
             iconItemView.setImageResource(if(task.category == Category.Home) R.drawable.home else R.drawable.study)
         }
 
