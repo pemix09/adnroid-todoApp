@@ -2,6 +2,7 @@ package pl.edu.pb.todoapp
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,10 +45,10 @@ class TaskListFragment : Fragment() {
         RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item_task, parent, false)),
         View.OnClickListener {
         private var task: Task? = null
-        private var nameTextView: TextView = itemView.findViewById(R.id.task_item_name)
-        private var dateTextView: TextView = itemView.findViewById(R.id.task_item_date)
+        var nameTextView: TextView = itemView.findViewById(R.id.task_item_name)
+        var dateTextView: TextView = itemView.findViewById(R.id.task_item_date)
         private val iconItemView: ImageView = itemView.findViewById(R.id.category_image_view)
-        public val checkBox: CheckBox = itemView.findViewById(R.id.task_checkbox_done)
+        val checkBox: CheckBox = itemView.findViewById(R.id.task_checkbox_done)
         var datePattern = "E, dd MMM yyyy HH:mm"
         var dateFormat: SimpleDateFormat = SimpleDateFormat(datePattern)
 
@@ -91,6 +92,13 @@ class TaskListFragment : Fragment() {
             var checkbox = holder.checkBox
             checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
                 tasks[holder.bindingAdapterPosition].isDone = isChecked
+                if(isChecked){
+                    holder.nameTextView.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                    holder.dateTextView.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                }else{
+                    holder.nameTextView.paintFlags = Paint.ANTI_ALIAS_FLAG
+                    holder.dateTextView.paintFlags = Paint.ANTI_ALIAS_FLAG
+                }
             }
         }
 
