@@ -66,9 +66,8 @@ class TaskFragment(taskId: UUID) : Fragment(), OnDateSetListener {
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
-        //TODO("Tutaj jest coś spierdolone ")
-        categorySpinner = view.findViewById(R.id.task_category)
-        categorySpinner.adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, Category.values())
+        categorySpinner = view.findViewById(R.id.task_category) as Spinner
+        categorySpinner.adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item,R.id.category_text_view,  Category.values())
         var itemSelectedListener = object : OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 task.category = Category.values()[position]
@@ -80,7 +79,7 @@ class TaskFragment(taskId: UUID) : Fragment(), OnDateSetListener {
 
         }
         categorySpinner.onItemSelectedListener = itemSelectedListener
-        categorySpinner.setSelection(task.category.ordinal)
+        //categorySpinner.setSelection(task.category.ordinal)
 
         return view
 
