@@ -71,6 +71,7 @@ class TaskFragment(taskId: UUID) : Fragment(), OnDateSetListener {
         var itemSelectedListener = object : OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 task.category = Category.values()[position]
+                TaskStorage.ChangeItem(task)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -79,7 +80,7 @@ class TaskFragment(taskId: UUID) : Fragment(), OnDateSetListener {
 
         }
         categorySpinner.onItemSelectedListener = itemSelectedListener
-        //categorySpinner.setSelection(task.category.ordinal)
+        categorySpinner.setSelection(task.category.ordinal)
 
         return view
 
