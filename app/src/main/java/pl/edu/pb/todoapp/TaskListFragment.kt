@@ -79,6 +79,8 @@ class TaskListFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_task_menu, menu)
         if(this.subtitleIsVisible){
+            var subtitle = getString(R.string.subtitle_format, TaskStorage.TaskToDoLeft())
+            activity?.title = subtitle
             inflater.inflate(R.menu.hide_subtitle, menu)
         }else{
             inflater.inflate(R.menu.show_subtitle, menu)
@@ -141,6 +143,8 @@ class TaskListFragment : Fragment() {
             var checkbox = holder.checkBox
             checkbox.setOnCheckedChangeListener { buttonView, isChecked ->
                 tasks[holder.bindingAdapterPosition].isDone = isChecked
+                TaskStorage.ChangeItem(tasks[holder.bindingAdapterPosition])
+                activity?.invalidateOptionsMenu()
                 if(isChecked){
                     holder.nameTextView.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                     holder.dateTextView.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
