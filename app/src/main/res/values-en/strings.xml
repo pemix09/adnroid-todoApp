@@ -7,5 +7,5 @@
     <string name="task_add_new">New task</string>
     <string name="show_subtitle">Show subtitle</string>
     <string name="hide_subtitle">Hide subtitle</string>
-    <string name="subtitle_format">%d tasks</string>
+    <string name="subtitle_format">%d tasks left</string>
 </resources>

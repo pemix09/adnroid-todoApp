@@ -52,13 +52,13 @@ class TaskListFragment : Fragment() {
             //TODO - show subtitle
             R.id.show_subtitle -> {
                 var subtitle = getString(R.string.subtitle_format, TaskStorage.TaskToDoLeft())
-                activity?.actionBar?.subtitle = subtitle
+                activity?.title = subtitle
                 this.subtitleIsVisible = true
                 activity?.invalidateOptionsMenu()
                 true
             }
             R.id.hide_subtitle -> {
-                activity?.actionBar?.subtitle = null
+                activity?.title = getString(R.string.app_name)
                 this.subtitleIsVisible = false
                 activity?.invalidateOptionsMenu()
                 true
