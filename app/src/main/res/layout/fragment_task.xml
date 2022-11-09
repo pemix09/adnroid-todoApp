@@ -6,24 +6,27 @@
     android:orientation="vertical">
 
     <TextView
-        style="?android:listSeparatorTextViewStyle"
+        style="@style/DefaultStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/name_label"/>
+        android:text="@string/name_label"
+        />
 
     <EditText
+        style="@style/DefaultStyle"
         android:id="@+id/task_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/name_hint"/>
 
     <TextView
-        style="?android:listSeparatorTextViewStyle"
+        style="@style/DefaultStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/details_label"/>
 
     <EditText
+        style="@style/DefaultStyle"
         android:id="@+id/task_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,6 +38,7 @@
         android:inputType="date"/>
 
     <CheckBox
+        style="@style/DefaultStyle"
         android:id="@+id/task_done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
