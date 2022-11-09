@@ -9,6 +9,8 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toolbar
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +23,7 @@ class TaskListFragment : Fragment() {
     var adapter: TaskAdapter = TaskAdapter(data)
     lateinit var recyclerView: RecyclerView;
     var subtitleIsVisible: Boolean = false
+    lateinit var actionBar: androidx.appcompat.widget.Toolbar
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,13 +55,14 @@ class TaskListFragment : Fragment() {
             //TODO - show subtitle
             R.id.show_subtitle -> {
                 var subtitle = getString(R.string.subtitle_format, TaskStorage.TaskToDoLeft())
-                activity?.title = subtitle
+                actionBar = activity?.findViewById(androidx.appcompat.R.id.action_bar) as androidx.appcompat.widget.Toolbar
+                actionBar.subtitle = subtitle
                 this.subtitleIsVisible = true
                 activity?.invalidateOptionsMenu()
                 true
             }
             R.id.hide_subtitle -> {
-                activity?.title = getString(R.string.app_name)
+                actionBar.subtitle = null
                 this.subtitleIsVisible = false
                 activity?.invalidateOptionsMenu()
                 true
@@ -80,7 +84,7 @@ class TaskListFragment : Fragment() {
         inflater.inflate(R.menu.fragment_task_menu, menu)
         if(this.subtitleIsVisible){
             var subtitle = getString(R.string.subtitle_format, TaskStorage.TaskToDoLeft())
-            activity?.title = subtitle
+            actionBar.subtitle = subtitle
             inflater.inflate(R.menu.hide_subtitle, menu)
         }else{
             inflater.inflate(R.menu.show_subtitle, menu)
