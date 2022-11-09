@@ -66,6 +66,7 @@ class TaskFragment(taskId: UUID) : Fragment(), OnDateSetListener {
                 calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
+        //TODO("Tutaj jest coś spierdolone ")
         categorySpinner = view.findViewById(R.id.task_category)
         categorySpinner.adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, Category.values())
         var itemSelectedListener = object : OnItemSelectedListener{

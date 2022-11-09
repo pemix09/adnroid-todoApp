@@ -121,7 +121,7 @@ class TaskListFragment : Fragment() {
             }
             catch(e: ActivityNotFoundException){
                 Toast.makeText(context,e.toString(),Toast.LENGTH_LONG).show();
-                System.out.print(e.toString())
+                print(e.toString())
             }
 
 
